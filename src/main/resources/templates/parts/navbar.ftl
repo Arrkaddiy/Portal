@@ -25,7 +25,9 @@
         </ul>
         <div class="navbar-text mr-3">Hello, ${name}!</div>
         <#if user??>
-        <@login.logout />
+            <@login.logoutB />
+        <#else>
+            <@login.loginB />
         </#if>
     </div>
 </nav>

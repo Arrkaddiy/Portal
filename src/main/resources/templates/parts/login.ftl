@@ -17,11 +17,20 @@
 </form>
 </#macro>
 
-<#macro logout>
+<#macro logoutB>
 <div>
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit" class="btn btn-primary">Sign Out</button>
+    </form>
+</div>
+</#macro>
+
+<#macro loginB>
+<div>
+    <form action="/main" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-primary">Sign In</button>
     </form>
 </div>
 </#macro>

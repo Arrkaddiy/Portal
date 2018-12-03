@@ -4,12 +4,37 @@
 ADD NEW USER
 <div>${message?ifExists}<div>
 <form action="/registration" method="post" id="2">
-    <div><label> User Name : <input type="text" name="username"/></label></div>
-    <div><label> Password: <input type="password" name="password"/></label></div>
-    <div><label> Email: <input type="text" name="email"/></label></div>
-    <div><label> FirstName: <input type="text" name="firstname"/></label></div>
-    <div><label> LastName: <input type="text" name="lastname"/></label></div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Login : </label>
+        <div class="col-sm-5">
+            <input type="text" name="username" class="form-control" placeholder="Login"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Password : </label>
+        <div class="col-sm-5">
+            <input type="password" name="password" class="form-control" placeholder="Password"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Email : </label>
+        <div class="col-sm-5">
+            <input type="email" name="email" class="form-control" placeholder="Email"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Firstname : </label>
+        <div class="col-sm-5">
+            <input type="text" name="firstname" class="form-control" placeholder="Firstname"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> LastName : </label>
+        <div class="col-sm-5">
+            <input type="text" name="lastname" class="form-control" placeholder="LastName"/>
+        </div>
+    </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <div><input type="submit" value="Sign Up"/></div>
+    <button type="submit" class="btn btn-primary">Sign Up</button>
 </form>
 </@common.common>
