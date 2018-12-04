@@ -23,7 +23,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addCustomer(Customer customer, Map<String, Object> model){
-        Customer customerFromDb = customerRepo.findByUsername(customer.getUsername());
+        Customer customerFromDb = customerRepo.findByUsernameIgnoreCase(customer.getUsername());
 
         if (customerFromDb != null) {
             model.put("message", "Customer exists!");
@@ -31,7 +31,8 @@ public class RegistrationController {
         }
 
         customer.setActive(true);
-        customer.setRoles(Collections.singleton(Role.USER));
+        customer.setAvatarname("none");
+        customer.setRoles(Collections.singleton(Role.ADMIN));
         customerRepo.save(customer);
 
         return "redirect:/login";

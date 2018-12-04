@@ -31,14 +31,35 @@ public class Customer implements UserDetails {
     @Column(unique = true, nullable = false, length = 60)
     private String email;
 
+    @Column(length = 40)
+    private String country;
+
+    @Column(length = 40)
+    private String sity;
+
+    @Column(length = 70)
+    private String address;
+
+    @Column(length = 24)
+    private String phone;
+
+    @Column
+    private Long score;
+
     private boolean active;
+
+    private String avatarname;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SUPPORT_CUSTOMER_ID")
+    private Customer customer;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CUSTOMER_ROLE", joinColumns = @JoinColumn(name = "CUSTOMER_ROW_ID"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    private String avatarname;
+
 
     public long getRow_id() {
         return row_id;
@@ -141,5 +162,53 @@ public class Customer implements UserDetails {
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getSity() {
+        return sity;
+    }
+
+    public void setSity(String sity) {
+        this.sity = sity;
+    }
+
+    public String getAdress() {
+        return address;
+    }
+
+    public void setAdress(String adress) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Long getScore() {
+        return score;
+    }
+
+    public void setScore(Long score) {
+        this.score = score;
     }
 }

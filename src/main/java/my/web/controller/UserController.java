@@ -22,8 +22,21 @@ public class UserController {
     private CustomerRepo customerRepo;
 
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", customerRepo.findAll());
+    public String userList(@RequestParam(required = false, defaultValue = "") String searchfiltr,
+                           @RequestParam(required = false,defaultValue = "") String search,
+                           Model model) {
+
+        Iterable<Customer> customers;
+
+        if(search != null && !search.isEmpty() && !searchfiltr.equals("Search for")) {
+            customers = customerRepo.findByUsernameLike(search);
+        } else {
+            customers = customerRepo.findAll();
+        }
+
+        model.addAttribute("customers", customers);
+        model.addAttribute("search", search);
+
         return "userList";
     }
 

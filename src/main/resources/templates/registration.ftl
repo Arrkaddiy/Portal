@@ -34,6 +34,31 @@ ADD NEW USER
             <input type="text" name="lastname" class="form-control" placeholder="LastName"/>
         </div>
     </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Phone : </label>
+        <div class="col-sm-4">
+            <input type="text" name="phone" class="form-control" placeholder="Phone"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Country : </label>
+        <div class="col-sm-4">
+            <input type="text" name="country" class="form-control" placeholder="Country"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Sity : </label>
+        <div class="col-sm-4">
+            <input type="text" name="sity" class="form-control" placeholder="Sity"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Address : </label>
+        <div class="col-sm-4">
+            <input type="text" name="address" class="form-control" placeholder="Address"/>
+        </div>
+    </div>
+
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     <button type="submit" class="btn btn-primary">Sign Up</button>
 </form>

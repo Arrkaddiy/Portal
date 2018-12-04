@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -29,18 +26,18 @@ public class PersonalPageController {
     @GetMapping
     public String personalPage(@AuthenticationPrincipal Customer customer, Model model) {
 
-        model.addAttribute("customer", customerRepo.findByUsername(customer.getUsername()));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
         return "personalPage";
     }
 
     @GetMapping("{customer}")
     public String personalPageId(Customer customer, Model model) {
 
-        model.addAttribute("customer", customerRepo.findByUsername(customer.getUsername()));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
         return "personalPage";
     }
 
-    @PostMapping
+    @PostMapping("{customer}")
     public String addPicture(@AuthenticationPrincipal Customer customer,
                              @RequestParam(name = "file") MultipartFile file,
                              Model model) throws IOException {
@@ -62,7 +59,7 @@ public class PersonalPageController {
 
         customerRepo.save(customer);
 
-        model.addAttribute("customer", customerRepo.findByUsername(customer.getUsername()));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
 
         return "personalPage";
     }

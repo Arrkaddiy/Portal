@@ -21,6 +21,7 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(
+            @AuthenticationPrincipal Customer customer,
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model){
 
@@ -32,6 +33,7 @@ public class MainController {
             invoices = invoiceRepo.findAll();
         }
 
+        model.addAttribute("customer", customer);
         model.addAttribute("invoices", invoices);
         model.addAttribute("filter", filter);
 
