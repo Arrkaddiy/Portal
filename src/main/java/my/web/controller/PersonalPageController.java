@@ -33,6 +33,13 @@ public class PersonalPageController {
         return "personalPage";
     }
 
+    @GetMapping("{customer}")
+    public String personalPageId(Customer customer, Model model) {
+
+        model.addAttribute("customer", customerRepo.findByUsername(customer.getUsername()));
+        return "personalPage";
+    }
+
     @PostMapping
     public String addPicture(@AuthenticationPrincipal Customer customer,
                              @RequestParam(name = "file") MultipartFile file,
