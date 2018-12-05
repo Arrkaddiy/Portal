@@ -49,11 +49,28 @@ public class UserController {
 
     @PostMapping
     public String userSave(
-            @RequestParam("customerUserName") String username,
+            @RequestParam("UserName") String username,
+            @RequestParam("password") String password,
+            @RequestParam("email") String email,
+            @RequestParam("firstname") String firstname,
+            @RequestParam("lastname") String lastname,
+            @RequestParam("phone") String phone,
+            @RequestParam("country") String country,
+            @RequestParam("sity") String sity,
+            @RequestParam("address") String address,
+
             @RequestParam Map<String, String> form,
             @RequestParam("customerRowId") Customer customer){
 
         customer.setUsername(username);
+        customer.setPassword(password);
+        customer.setEmail(email);
+        customer.setFirstname(firstname);
+        customer.setLastname(lastname);
+        customer.setPhone(phone);
+        customer.setCountry(country);
+        customer.setSity(sity);
+        customer.setAddress(address);
 
        Set<String> roles = Arrays.stream(Role.values())
                .map(Role::name)
@@ -67,6 +84,23 @@ public class UserController {
            }
        }
 
+        customerRepo.save(customer);
+
+        return "redirect:/user";
+    }
+    @GetMapping("/active/{customer}")
+    public String active(@PathVariable Customer customer, Model model) {
+
+        customer.setActive(true);
+        customerRepo.save(customer);
+
+        return "redirect:/user";
+    }
+
+    @GetMapping("/terminate/{customer}")
+    public String terminate(@PathVariable Customer customer, Model model) {
+
+        customer.setActive(false);
         customerRepo.save(customer);
 
         return "redirect:/user";

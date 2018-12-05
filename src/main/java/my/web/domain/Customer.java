@@ -52,14 +52,12 @@ public class Customer implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SUPPORT_CUSTOMER_ID")
-    private Customer customer;
+    private Customer customersupp;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CUSTOMER_ROLE", joinColumns = @JoinColumn(name = "CUSTOMER_ROW_ID"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-
 
     public long getRow_id() {
         return row_id;
@@ -180,11 +178,11 @@ public class Customer implements UserDetails {
         this.sity = sity;
     }
 
-    public String getAdress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAdress(String adress) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -197,11 +195,11 @@ public class Customer implements UserDetails {
     }
 
     public Customer getCustomer() {
-        return customer;
+        return customersupp;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomer(Customer customersupp) {
+        this.customersupp = customersupp;
     }
 
     public Long getScore() {
@@ -210,5 +208,9 @@ public class Customer implements UserDetails {
 
     public void setScore(Long score) {
         this.score = score;
+    }
+
+    public String getSpUserName(){
+        return customersupp != null ? customersupp.getUsername() : "<none>";
     }
 }

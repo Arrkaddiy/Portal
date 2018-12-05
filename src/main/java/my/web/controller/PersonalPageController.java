@@ -4,6 +4,7 @@ import my.web.domain.Customer;
 import my.web.repos.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,15 +32,43 @@ public class PersonalPageController {
     }
 
     @GetMapping("{customer}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String personalPageId(Customer customer, Model model) {
 
         model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
         return "personalPage";
     }
 
-    @PostMapping("{customer}")
+    @PostMapping
     public String addPicture(@AuthenticationPrincipal Customer customer,
                              @RequestParam(name = "file") MultipartFile file,
+                             Model model) throws IOException {
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadpath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuidfile = UUID.randomUUID().toString();
+            String resultfilename = uuidfile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadpath + "/" + resultfilename));
+
+            customer.setAvatarname(resultfilename);
+        }
+
+        customerRepo.save(customer);
+
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
+
+        return "personalPage";
+    }
+
+    @PostMapping("{customer}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String addPictureID(Customer customer, @RequestParam(name = "file") MultipartFile file,
                              Model model) throws IOException {
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {

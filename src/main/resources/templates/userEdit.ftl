@@ -6,7 +6,7 @@ User Editor
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> Login : </label>
         <div class="col-sm-4">
-            <input type="text" name="customerUserName" class="form-control" value="${customer.username}"/>
+            <input type="text" name="UserName" class="form-control" value="${customer.username}"/>
         </div>
     </div>
     <div class="form-group row">
@@ -36,32 +36,44 @@ User Editor
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> Phone : </label>
         <div class="col-sm-4">
-            <input type="text" name="phone" class="form-control" value="${customer.phone}"/>
+            <input type="text" name="phone" class="form-control" value="${customer.phone?ifExists}"/>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> Country : </label>
         <div class="col-sm-4">
-            <input type="text" name="country" class="form-control" value="${customer.country}"/>
+            <input type="text" name="country" class="form-control" value="${customer.country?ifExists}"/>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> Sity : </label>
         <div class="col-sm-4">
-            <input type="text" name="sity" class="form-control" value="${customer.sity}"/>
+            <input type="text" name="sity" class="form-control" value="${customer.sity?ifExists}"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"> Address : </label>
+        <div class="col-sm-4">
+            <input type="text" name="address" class="form-control" value="${customer.address?ifExists}"/>
         </div>
     </div>
 
-    <#list roles as role>
-    <div>
-        <label><input type="checkbox" name="${role}" ${customer.roles?seq_contains(role)?string("cheked","")}>${role} </label>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <#list roles as role>
+        <label class="btn btn-secondary <#list customer.roles as custmrole> <#if role == custmrole> active </#if> </#list>">
+            <input type="radio" name="${role}" autocomplete="off" <#list customer.roles as custmrole> <#if role == custmrole> cheeked </#if> </#list>> ${role}
+        </label>
+        </#list>
     </div>
-    </#list>
+
 
 
     <input type="hidden" value="${customer.row_id}" name="customerRowId">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <button type="submit" class="btn btn-primary mt-1">Save</button>
+    <div>
+        <button type="submit" class="btn btn-primary mt-1">Save</button>
+    </div>
+
 </form>
 
 </@common.common>

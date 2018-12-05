@@ -21,6 +21,15 @@ public class Invoice {
     @Column(name = "BILLING_ADDRESS", /*nullable = false,*/ length = 70)
     private String billingaddress;
 
+    @Column(name = "BILLING_CITY", /*nullable = false,*/ length = 40)
+    private String billingcity;
+
+    @Column(name = "BILLING_COUNTRY", /*nullable = false,*/ length = 40)
+    private String billingcountry;
+
+    @Column(name = "TOTAL", /*nullable = false,*/ length = 40)
+    private long total;
+
     public Invoice() {
     }
 

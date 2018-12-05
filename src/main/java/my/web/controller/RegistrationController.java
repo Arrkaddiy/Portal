@@ -31,8 +31,8 @@ public class RegistrationController {
         }
 
         customer.setActive(true);
-        customer.setAvatarname("none");
-        customer.setRoles(Collections.singleton(Role.ADMIN));
+        customer.setAvatarname("e1b242c7-ed7c-4349-add6-f930ea77da57.def.jpg");
+        customer.setRoles(Collections.singleton(Role.USER));
         customerRepo.save(customer);
 
         return "redirect:/login";
