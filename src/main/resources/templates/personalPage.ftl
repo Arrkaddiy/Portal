@@ -64,12 +64,6 @@ Pesonal Page
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label"> Support : </label>
-    <div class="col-sm-4">
-        <input type="text" name="support" readonly class="form-control" value="${customer.SpUserName?ifExists}"/>
-    </div>
-</div>
-<div class="form-group row">
     <label class="col-sm-2 col-form-label"> Score : </label>
     <div class="col-sm-4">
         <input type="text" name="score" readonly class="form-control" value="${customer.score?ifExists}"/>

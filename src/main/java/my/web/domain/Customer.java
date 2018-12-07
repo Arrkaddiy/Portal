@@ -50,10 +50,6 @@ public class Customer implements UserDetails {
 
     private String avatarname;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SUPPORT_CUSTOMER_ID")
-    private Customer customersupp;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "CUSTOMER_ROLE", joinColumns = @JoinColumn(name = "CUSTOMER_ROW_ID"))
     @Enumerated(EnumType.STRING)
@@ -194,14 +190,6 @@ public class Customer implements UserDetails {
         this.phone = phone;
     }
 
-    public Customer getCustomer() {
-        return customersupp;
-    }
-
-    public void setCustomer(Customer customersupp) {
-        this.customersupp = customersupp;
-    }
-
     public Long getScore() {
         return score;
     }
@@ -210,7 +198,7 @@ public class Customer implements UserDetails {
         this.score = score;
     }
 
-    public String getSpUserName(){
-        return customersupp != null ? customersupp.getUsername() : "<none>";
-    }
+
+
+
 }

@@ -4,6 +4,7 @@ import my.web.domain.Invoice;
 import my.web.domain.Customer;
 import my.web.repos.InvoiceRepo;
 import my.web.repos.CustomerRepo;
+import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,24 +18,17 @@ import java.util.Map;
 @Controller
 public class MainController {
     @Autowired
-    private InvoiceRepo invoiceRepo;
+    private InvoiceService invoiceService;
 
     @GetMapping("/main")
     public String main(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal Customer customerAuth,
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model){
 
-        Iterable<Invoice> invoices;
-
-        if(filter != null && !filter.isEmpty()) {
-            invoices = invoiceRepo.findByInvoicedate(filter);
-        } else {
-            invoices = invoiceRepo.findAll();
-        }
-
-        model.addAttribute("customer", customer);
-        model.addAttribute("invoices", invoices);
+        model.addAttribute("customer", customerAuth);
+        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+        model.addAttribute("invoices", invoiceService.filter(filter));
         model.addAttribute("filter", filter);
 
         return "main";
@@ -42,18 +36,14 @@ public class MainController {
 
     @PostMapping("/main")
     public String add(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal Customer customerAuth,
             @RequestParam String date,
-            @RequestParam String point,
-            Map<String, Object> model) {
+            @RequestParam String point) {
 
-        Invoice invoice = new Invoice(date, point, customer);
-        invoiceRepo.save(invoice);
+        Invoice invoice = new Invoice(date, point, customerAuth);
+        invoiceService.save(invoice);
 
-        Iterable<Invoice> invoices = invoiceRepo.findAll();
-        model.put("invoices", invoices);
-
-        return "main";
+        return "redirect:/main";
     }
 
 }

@@ -1,7 +1,10 @@
 package my.web.controller;
 
+import my.web.Thread.MailThreadController;
 import my.web.domain.Customer;
 import my.web.repos.CustomerRepo;
+import my.web.service.FileService;
+import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,27 +23,34 @@ import java.util.UUID;
 public class PersonalPageController {
     @Autowired
     private CustomerRepo customerRepo;
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private FileService fileService;
 
     @Value("${upload.path}")
     private String uploadpath;
 
     @GetMapping
-    public String personalPage(@AuthenticationPrincipal Customer customer, Model model) {
+    public String personalPage(@AuthenticationPrincipal Customer customerAuth, Model model) {
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
+        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
         return "personalPage";
     }
 
     @GetMapping("{customer}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String personalPageId(Customer customer, Model model) {
+    public String personalPageId(@AuthenticationPrincipal Customer customerAuth,
+                                 Customer customer, Model model) {
 
         model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
+        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
         return "personalPage";
     }
 
     @PostMapping
-    public String addPicture(@AuthenticationPrincipal Customer customer,
+    public String addPicture(@AuthenticationPrincipal Customer customerAuth,
                              @RequestParam(name = "file") MultipartFile file,
                              Model model) throws IOException {
 
@@ -56,36 +66,24 @@ public class PersonalPageController {
 
             file.transferTo(new File(uploadpath + "/" + resultfilename));
 
-            customer.setAvatarname(resultfilename);
+            customerAuth.setAvatarname(resultfilename);
         }
 
-        customerRepo.save(customer);
+        customerRepo.save(customerAuth);
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
 
         return "personalPage";
     }
 
     @PostMapping("{customer}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String addPictureID(Customer customer, @RequestParam(name = "file") MultipartFile file,
-                             Model model) throws IOException {
+    public String addPictureID(@RequestParam(name = "file") MultipartFile file,
+                               Customer customer, Model model) throws IOException {
 
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadpath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidfile = UUID.randomUUID().toString();
-            String resultfilename = uuidfile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadpath + "/" + resultfilename));
-
-            customer.setAvatarname(resultfilename);
+        if (fileService.addPicture(file) != null){
+            customer.setAvatarname(fileService.addPicture(file));
         }
-
         customerRepo.save(customer);
 
         model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));

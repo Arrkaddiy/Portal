@@ -3,8 +3,10 @@ package my.web.controller;
 import my.web.domain.Customer;
 import my.web.domain.Role;
 import my.web.repos.CustomerRepo;
+import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,12 @@ public class UserController {
     @Autowired
     private CustomerRepo customerRepo;
 
+    @Autowired
+    private InvoiceService invoiceService;
+
     @GetMapping
-    public String userList(@RequestParam(required = false, defaultValue = "") String searchfiltr,
+    public String userList(@AuthenticationPrincipal Customer customerAuth,
+                           @RequestParam(required = false, defaultValue = "") String searchfiltr,
                            @RequestParam(required = false,defaultValue = "") String search,
                            Model model) {
 
@@ -36,14 +42,17 @@ public class UserController {
 
         model.addAttribute("customers", customers);
         model.addAttribute("search", search);
+        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
 
         return "userList";
     }
 
     @GetMapping("{customer}")
-    public String userEditForm(@PathVariable Customer customer, Model model) {
+    public String userEditForm(@AuthenticationPrincipal Customer customerAuth,
+                               @PathVariable Customer customer, Model model) {
         model.addAttribute("user", customer);
         model.addAttribute("roles", Role.values());
+        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
         return "userEdit";
     }
 
@@ -89,7 +98,7 @@ public class UserController {
         return "redirect:/user";
     }
     @GetMapping("/active/{customer}")
-    public String active(@PathVariable Customer customer, Model model) {
+    public String active(@PathVariable Customer customer) {
 
         customer.setActive(true);
         customerRepo.save(customer);
@@ -98,7 +107,7 @@ public class UserController {
     }
 
     @GetMapping("/terminate/{customer}")
-    public String terminate(@PathVariable Customer customer, Model model) {
+    public String terminate(@PathVariable Customer customer) {
 
         customer.setActive(false);
         customerRepo.save(customer);

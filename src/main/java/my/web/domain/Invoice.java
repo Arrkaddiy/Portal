@@ -15,20 +15,29 @@ public class Invoice {
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
-    @Column(name = "INVOICE_DATE", /*nullable = false,*/ length = 20)
+    @Column(name = "INVOICE_NAME", nullable = false, length = 70)
+    private String invoicename;
+
+    @Column(name = "INVOICE_DATE", nullable = false, length = 20)
     private String invoicedate;
 
-    @Column(name = "BILLING_ADDRESS", /*nullable = false,*/ length = 70)
+    @Column(name = "BILLING_ADDRESS", nullable = false, length = 70)
     private String billingaddress;
 
-    @Column(name = "BILLING_CITY", /*nullable = false,*/ length = 40)
+    @Column(name = "BILLING_CITY", nullable = false, length = 40)
     private String billingcity;
 
-    @Column(name = "BILLING_COUNTRY", /*nullable = false,*/ length = 40)
+    @Column(name = "BILLING_COUNTRY", nullable = false, length = 40)
     private String billingcountry;
 
-    @Column(name = "TOTAL", /*nullable = false,*/ length = 40)
+    @Column(name = "TOTAL", length = 40)
     private long total;
+
+    @Column(name = "DONE")
+    private boolean done;
+
+    @Column(name = "Progress")
+    private boolean progress;
 
     public Invoice() {
     }
@@ -73,5 +82,69 @@ public class Invoice {
 
     public void setBilling_address(String billing_address) {
         this.billingaddress = billing_address;
+    }
+
+    public String getInvoicedate() {
+        return invoicedate;
+    }
+
+    public void setInvoicedate(String invoicedate) {
+        this.invoicedate = invoicedate;
+    }
+
+    public String getBillingaddress() {
+        return billingaddress;
+    }
+
+    public void setBillingaddress(String billingaddress) {
+        this.billingaddress = billingaddress;
+    }
+
+    public String getBillingcity() {
+        return billingcity;
+    }
+
+    public void setBillingcity(String billingcity) {
+        this.billingcity = billingcity;
+    }
+
+    public String getBillingcountry() {
+        return billingcountry;
+    }
+
+    public void setBillingcountry(String billingcountry) {
+        this.billingcountry = billingcountry;
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public boolean isProgress() {
+        return progress;
+    }
+
+    public void setProgress(boolean progress) {
+        this.progress = progress;
+    }
+
+    public String getInvoicename() {
+        return invoicename;
+    }
+
+    public void setInvoicename(String invoicename) {
+        this.invoicename = invoicename;
     }
 }
