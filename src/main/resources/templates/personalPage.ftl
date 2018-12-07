@@ -1,6 +1,5 @@
 <#import "parts/common.ftl" as common>
 
-
 <@common.common>
 Pesonal Page
 

@@ -13,55 +13,56 @@
                 <a class="btn btn-primary" href="/user" role="button">User List</a>
             </li>
             </#if>
-            <#if user??>
-            <li class="nav-item mr-1">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        My Mail
-                        <#if invoicessize != 0>
-                        <span class="badge badge-light">${invoicessize}new</span>
+        <#if user??>
+        <li class="nav-item mr-1">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    My Mail
+                    <#if myInboxMail != 0>
+                        <span class="badge badge-light">${myInboxMail}new</span>
                     </#if>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/mail/input">
-                            Inbox
-                            <#if invoicessize != 0>
-                            <span class="badge badge-primary">${invoicessize}new</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/mail/new_message">New message</a>
+                    <a class="dropdown-item" href="/mail/input">
+                        Inbox
+                        <#if myInboxMail != 0>
+                            <span class="badge badge-primary">${myInboxMail} new</span>
                             <span class="sr-only">Active invoice</span>
                         </#if>
-                        </a>
-                        <a class="dropdown-item" href="/mail/output">Sent</a>
-                    </div>
+                    </a>
+                    <a class="dropdown-item" href="/mail/output">Sent</a>
                 </div>
-            </li>
-            <li class="nav-item mr-1">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        My invoice
-                        <#if invoicessize != 0>
+            </div>
+        </li>
+        <li class="nav-item mr-1">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    My invoice
+                    <#if invoicessize != 0>
                         <span class="badge badge-light">${invoicessize}</span>
                         <span class="sr-only">Active invoice</span>
-                        </#if>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/invoices/inprogress">In Progress
-                            <#if invoicessize != 0>
+                    </#if>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/invoices/inprogress">In Progress
+                        <#if invoicessize != 0>
                             <span class="badge badge-primary">${invoicessize}</span>
                             <span class="sr-only">Active invoice</span>
-                            </#if>
-                        </a>
-                        <a class="dropdown-item" href="#">Done</a>
-                    </div>
+                        </#if>
+                    </a>
+                    <a class="dropdown-item" href="#">Done</a>
                 </div>
-            </li>
-            </#if>
-        </ul>
-        <div class="navbar-text mr-3">Hello, ${name}!</div>
-        <#if user??>
-            <div> <a class="btn btn-primary mr-1" href="/personalpage" role="button">Personal Page</a></div>
-            <@login.logoutB />
-        <#else>
-            <@login.loginB />
-        </#if>
+            </div>
+        </li>
+    </#if>
+    </ul>
+    <div class="navbar-text mr-3">Hello, ${name}!</div>
+    <#if user??>
+        <div><a class="btn btn-primary mr-1" href="/personalpage" role="button">Personal Page</a></div>
+        <@login.logoutB />
+    <#else>
+        <@login.loginB />
+    </#if>
     </div>
 </nav>

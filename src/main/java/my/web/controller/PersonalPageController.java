@@ -1,9 +1,9 @@
 package my.web.controller;
 
-import my.web.Thread.MailThreadController;
 import my.web.domain.Customer;
 import my.web.repos.CustomerRepo;
 import my.web.service.FileService;
+import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,6 +30,8 @@ public class PersonalPageController {
     private InvoiceService invoiceService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private IncludeMailService includeMailService;
 
     @Value("${upload.path}")
     private String uploadpath;
@@ -36,6 +41,7 @@ public class PersonalPageController {
 
         model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
         model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
         return "personalPage";
     }
 
@@ -44,6 +50,8 @@ public class PersonalPageController {
     public String personalPageId(@AuthenticationPrincipal Customer customerAuth,
                                  Customer customer, Model model) {
 
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
         model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
         model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
         return "personalPage";

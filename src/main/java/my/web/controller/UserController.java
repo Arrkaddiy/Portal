@@ -3,6 +3,7 @@ package my.web.controller;
 import my.web.domain.Customer;
 import my.web.domain.Role;
 import my.web.repos.CustomerRepo;
+import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,8 @@ public class UserController {
 
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private IncludeMailService includeMailService;
 
     @GetMapping
     public String userList(@AuthenticationPrincipal Customer customerAuth,
@@ -40,9 +43,11 @@ public class UserController {
             customers = customerRepo.findAll();
         }
 
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
         model.addAttribute("customers", customers);
         model.addAttribute("search", search);
         model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
 
         return "userList";
     }
@@ -50,9 +55,12 @@ public class UserController {
     @GetMapping("{customer}")
     public String userEditForm(@AuthenticationPrincipal Customer customerAuth,
                                @PathVariable Customer customer, Model model) {
+
         model.addAttribute("user", customer);
         model.addAttribute("roles", Role.values());
         model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
         return "userEdit";
     }
 

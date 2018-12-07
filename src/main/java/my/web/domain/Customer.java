@@ -198,7 +198,4 @@ public class Customer implements UserDetails {
         this.score = score;
     }
 
-
-
-
 }

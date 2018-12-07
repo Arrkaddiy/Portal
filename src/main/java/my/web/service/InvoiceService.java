@@ -18,7 +18,7 @@ public class InvoiceService {
     }
 
     public int customerInvoiceOwner (Customer customer) {
-        return invoiceRepo.findByCustomerAndProgressTrue(customer).size();
+        return invoiceRepo.findByCustomer(customer).size();
     }
 
     public Iterable<Invoice> filter(String filter) {

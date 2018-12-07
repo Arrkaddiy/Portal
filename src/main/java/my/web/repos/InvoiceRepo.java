@@ -11,4 +11,5 @@ public interface InvoiceRepo extends JpaRepository<Invoice, Long> {
     List<Invoice> findByCustomerAndProgressTrue (Customer customer);
     List<Invoice> findByInvoicedate (String invoice_date);
 
+
 }

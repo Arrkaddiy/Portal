@@ -23,6 +23,9 @@ public class UserService implements UserDetailsService {
         return customerRepo.findByUsernameIgnoreCase(username);
     }
 
+    public Customer loadCustomerByUsername(String username) {
+        return customerRepo.findByUsernameIgnoreCase(username);
+    }
     public boolean addUser(Customer customer) {
 
         Customer customerFromDb = customerRepo.findByUsernameIgnoreCase(customer.getUsername());
