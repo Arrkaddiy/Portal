@@ -67,7 +67,15 @@ Pesonal Page
         <input type="text" name="score" readonly class="form-control" value="${user.score?ifExists}"/>
     </div>
 </div>
-
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label"> Support : </label>
+    <div class="col-sm-4">
+        <input type="text" name="support" readonly class="form-control" value="${user.getSupportUserName()?ifExists}"/>
+    </div>
+    <div>
+        <a class="btn btn-primary" href="/mail/new_message/${user.getSupportUserName()}" role="button">Write</a>
+    </div>
+</div>
 <div>
     <a href="/main">Return</a>
 </div>

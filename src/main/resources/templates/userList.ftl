@@ -41,6 +41,8 @@ List of User
             <a class="dropdown-item" href="/user/${user.row_id}">Edit</a>
             <a class="dropdown-item" href="/personalPage/${user.row_id}">PP</a>
             <div role="separator" class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/user/checkIn/${user.row_id}">Check In</a>
+            <div role="separator" class="dropdown-divider"></div>
             <a class="dropdown-item" href="/user/active/${user.row_id}">Active</a>
             <a class="dropdown-item" href="/user/terminate/${user.row_id}">Terminate</a>
         </div>

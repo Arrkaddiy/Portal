@@ -157,4 +157,14 @@ public class UserController {
         return "redirect:/user";
     }
 
+    @GetMapping("/checkIn/{user}")
+    public String checkIn(@AuthenticationPrincipal User userAuth,
+                          @PathVariable User user) {
+
+        user.setSupport(userAuth);
+        userService.save(user);
+
+        return "redirect:/user";
+    }
+
 }

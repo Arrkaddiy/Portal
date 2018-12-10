@@ -24,6 +24,11 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false, length = 40)
     private String username;
 
+    /* Уникальный ID пользователя поддержки */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Support_ID")
+    private User support;
+
     /* Пароль пользователя */
     @Column(nullable = false, length = 20)
     private String password;
@@ -215,4 +220,15 @@ public class User implements UserDetails {
         this.score = score;
     }
 
+    public User getSupport() {
+        return support;
+    }
+
+    public void setSupport(User support) {
+        this.support = support;
+    }
+
+    public String getSupportUserName(){
+        return support != null ? support.getUsername() : "";
+    }
 }
