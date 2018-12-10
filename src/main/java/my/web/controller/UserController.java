@@ -1,10 +1,10 @@
 package my.web.controller;
 
-import my.web.domain.Customer;
 import my.web.domain.Role;
-import my.web.repos.CustomerRepo;
+import my.web.domain.User;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
+import my.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,104 +21,138 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
-    @Autowired
-    private CustomerRepo customerRepo;
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private InvoiceService invoiceService;
     @Autowired
     private IncludeMailService includeMailService;
 
+    /**
+     * Список пользователей
+     * @param userAuth
+     * @param searchFilter
+     * @param search
+     * @param model
+     * @return
+     */
     @GetMapping
-    public String userList(@AuthenticationPrincipal Customer customerAuth,
-                           @RequestParam(required = false, defaultValue = "") String searchfiltr,
+    public String userList(@AuthenticationPrincipal User userAuth,
+                           @RequestParam(required = false, defaultValue = "") String searchFilter,
                            @RequestParam(required = false,defaultValue = "") String search,
                            Model model) {
 
-        Iterable<Customer> customers;
+        Iterable<User> users;
 
-        if(search != null && !search.isEmpty() && !searchfiltr.equals("Search for")) {
-            customers = customerRepo.findByUsernameLike(search);
+        if(search != null && !search.isEmpty() && !searchFilter.equals("Search for")) {
+            users = userService.loadUsersByUsernameLike(search);
         } else {
-            customers = customerRepo.findAll();
+            users = userService.loadUsersAll();
         }
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
-        model.addAttribute("customers", customers);
+        model.addAttribute("userAuth", userService.loadUserObjByUsername(userAuth.getUsername()));
+        model.addAttribute("users", users);
         model.addAttribute("search", search);
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
 
         return "userList";
     }
 
-    @GetMapping("{customer}")
-    public String userEditForm(@AuthenticationPrincipal Customer customerAuth,
-                               @PathVariable Customer customer, Model model) {
+    /**
+     * Страница изменения пользователя
+     * @param userAuth
+     * @param user
+     * @param model
+     * @return
+     */
+    @GetMapping("{user}")
+    public String userEditForm(@AuthenticationPrincipal User userAuth,
+                               @PathVariable User user, Model model) {
 
-        model.addAttribute("user", customer);
+        model.addAttribute("user", user);
+        model.addAttribute("userAuth", userService.loadUserObjByUsername(userAuth.getUsername()));
         model.addAttribute("roles", Role.values());
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+
         return "userEdit";
     }
 
+    /**
+     * Изменение пользователя
+     * @param username
+     * @param password
+     * @param email
+     * @param firstName
+     * @param lastName
+     * @param phone
+     * @param country
+     * @param city
+     * @param address
+     * @param form
+     * @param user
+     * @return
+     */
     @PostMapping
     public String userSave(
-            @RequestParam("UserName") String username,
+            @RequestParam("username") String username,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
-            @RequestParam("firstname") String firstname,
-            @RequestParam("lastname") String lastname,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
             @RequestParam("phone") String phone,
             @RequestParam("country") String country,
-            @RequestParam("sity") String sity,
+            @RequestParam("city") String city,
             @RequestParam("address") String address,
 
             @RequestParam Map<String, String> form,
-            @RequestParam("customerRowId") Customer customer){
+            @RequestParam("userRowId") User user){
 
-        customer.setUsername(username);
-        customer.setPassword(password);
-        customer.setEmail(email);
-        customer.setFirstname(firstname);
-        customer.setLastname(lastname);
-        customer.setPhone(phone);
-        customer.setCountry(country);
-        customer.setSity(sity);
-        customer.setAddress(address);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhone(phone);
+        user.setCountry(country);
+        user.setCity(city);
+        user.setAddress(address);
 
        Set<String> roles = Arrays.stream(Role.values())
                .map(Role::name)
                .collect(Collectors.toSet());
 
-       customer.getRoles().clear();
+       user.getRoles().clear();
 
        for (String key : form.keySet()){
            if (roles.contains(key)) {
-               customer.getRoles().add(Role.valueOf(key));
+               user.getRoles().add(Role.valueOf(key));
            }
        }
 
-        customerRepo.save(customer);
-
-        return "redirect:/user";
-    }
-    @GetMapping("/active/{customer}")
-    public String active(@PathVariable Customer customer) {
-
-        customer.setActive(true);
-        customerRepo.save(customer);
+        userService.save(user);
 
         return "redirect:/user";
     }
 
-    @GetMapping("/terminate/{customer}")
-    public String terminate(@PathVariable Customer customer) {
+    @GetMapping("/active/{user}")
+    public String active(@PathVariable User user) {
 
-        customer.setActive(false);
-        customerRepo.save(customer);
+        user.setActive(true);
+        userService.save(user);
+
+        return "redirect:/user";
+    }
+
+    @GetMapping("/terminate/{user}")
+    public String terminate(@PathVariable User user) {
+
+        user.setActive(false);
+        userService.save(user);
 
         return "redirect:/user";
     }

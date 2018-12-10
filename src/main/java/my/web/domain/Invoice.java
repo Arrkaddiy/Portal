@@ -2,54 +2,67 @@ package my.web.domain;
 
 import javax.persistence.*;
 
+/**
+ * Список счетов
+ */
 @Entity
 @Table(name = "INVOICES")
 public class Invoice {
 
+    /* Уникальный ID счета */
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "ROW_ID", nullable = false, unique = true)
     private long row_id;
 
+    /* Уникальный ID владельца счета */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CUSTOMER_ID")
-    private Customer customer;
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
+    /* Наименование счета */
     @Column(name = "INVOICE_NAME", nullable = false, length = 70)
-    private String invoicename;
+    private String invoiceName;
 
+    /* Дата создания счета */
     @Column(name = "INVOICE_DATE", nullable = false, length = 20)
-    private String invoicedate;
+    private String invoiceDate;
 
+    /* Адрес доставки */
     @Column(name = "BILLING_ADDRESS", nullable = false, length = 70)
-    private String billingaddress;
+    private String billingAddress;
 
+    /* Город доставки */
     @Column(name = "BILLING_CITY", nullable = false, length = 40)
-    private String billingcity;
+    private String billingCity;
 
+    /* Страна доставки */
     @Column(name = "BILLING_COUNTRY", nullable = false, length = 40)
-    private String billingcountry;
+    private String billingCountry;
 
+    /* Общая сумма счета */
     @Column(name = "TOTAL", length = 40)
     private long total;
 
+    /* Флаг выполнения счета */
     @Column(name = "DONE")
     private boolean done;
 
+    /* Флаг активности счета */
     @Column(name = "Progress")
     private boolean progress;
 
     public Invoice() {
     }
 
-    public Invoice(String invoice_date, String billing_address, Customer customer) {
-        this.customer = customer;
-        this.invoicedate = invoice_date;
-        this.billingaddress = billing_address;
+    public Invoice(String invoiceDate, String billingAddress, User user) {
+        this.user = user;
+        this.invoiceDate = invoiceDate;
+        this.billingAddress = billingAddress;
     }
 
     public String getUserName(){
-        return customer != null ? customer.getUsername() : "<none>";
+        return user != null ? user.getUsername() : "<none>";
     }
 
     public long getRow_id() {
@@ -60,60 +73,44 @@ public class Invoice {
         this.row_id = row_id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getInvoice_date() {
-        return invoicedate;
+    public String getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public void setInvoice_date(String invoice_date) {
-        this.invoicedate = invoice_date;
+    public void setInvoiceDate(String invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
-    public String getBilling_address() {
-        return billingaddress;
+    public String getBillingAddress() {
+        return billingAddress;
     }
 
-    public void setBilling_address(String billing_address) {
-        this.billingaddress = billing_address;
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
     }
 
-    public String getInvoicedate() {
-        return invoicedate;
+    public String getBillingCity() {
+        return billingCity;
     }
 
-    public void setInvoicedate(String invoicedate) {
-        this.invoicedate = invoicedate;
+    public void setBillingCity(String billingcity) {
+        this.billingCity = billingCity;
     }
 
-    public String getBillingaddress() {
-        return billingaddress;
+    public String getBillingCountry() {
+        return billingCountry;
     }
 
-    public void setBillingaddress(String billingaddress) {
-        this.billingaddress = billingaddress;
-    }
-
-    public String getBillingcity() {
-        return billingcity;
-    }
-
-    public void setBillingcity(String billingcity) {
-        this.billingcity = billingcity;
-    }
-
-    public String getBillingcountry() {
-        return billingcountry;
-    }
-
-    public void setBillingcountry(String billingcountry) {
-        this.billingcountry = billingcountry;
+    public void setBillingCountry(String billingCountry) {
+        this.billingCountry = billingCountry;
     }
 
     public long getTotal() {
@@ -140,11 +137,11 @@ public class Invoice {
         this.progress = progress;
     }
 
-    public String getInvoicename() {
-        return invoicename;
+    public String getInvoiceName() {
+        return invoiceName;
     }
 
-    public void setInvoicename(String invoicename) {
-        this.invoicename = invoicename;
+    public void setInvoiceName(String invoiceName) {
+        this.invoiceName = invoiceName;
     }
 }

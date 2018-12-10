@@ -1,6 +1,6 @@
 package my.web.controller;
 
-import my.web.domain.Customer;
+import my.web.domain.User;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,22 @@ public class InvoiceController {
 
     @Autowired
     private InvoiceService invoiceService;
-
     @Autowired
     private IncludeMailService includeMailService;
 
-    @GetMapping("/inprogress")
-    public String inprogress(
-            @AuthenticationPrincipal Customer customerAuth,
-            Model model){
+    /**
+     * Список счетов в работе
+     * @param userAuth
+     * @param model
+     * @return
+     */
+    @GetMapping("/inProgress")
+    public String inProgress(@AuthenticationPrincipal User userAuth, Model model){
 
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
-        model.addAttribute("invoicesinprogress", invoiceService.inProgress(customerAuth));
+        model.addAttribute("invoicesinprogress", invoiceService.inProgress(userAuth));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
 
         return "invoiceInProgress";
     }

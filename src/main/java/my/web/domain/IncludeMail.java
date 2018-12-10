@@ -2,32 +2,42 @@ package my.web.domain;
 
 import javax.persistence.*;
 
+/**
+ * Внутреная Почта
+ */
 @Entity
-@Table(name = "INCLUDEMAIL")
+@Table(name = "IncludeMAIL")
 public class IncludeMail {
 
+    /* Уникальный ID внетреннего сообщения */
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(unique = true)
     private long row_id;
 
+    /* Пользователь отправитель */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CUSTOMERFROM_ID")
-    private Customer customerFrom;
+    @JoinColumn(name = "UserFROM_ID")
+    private User userFrom;
 
+    /* Пользователь адрессат */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CUSTOMERTO_ID")
-    private Customer customerTo;
+    @JoinColumn(name = "UserTO_ID")
+    private User userTo;
 
+    /* Заголовок сообщения */
     @Column(nullable = false, length = 248)
     private String title;
 
+    /* Тело сообщения */
     @Column(nullable = false, length = 2048)
     private String body;
 
+    /* Флаг доставки сообщения */
     @Column(nullable = false)
     private boolean delivered;
 
+    /* Флаг прочтения сообщения */
     @Column(nullable = false)
     private boolean read;
 
@@ -35,9 +45,9 @@ public class IncludeMail {
 
     }
 
-    public IncludeMail(Customer customerFrom, Customer customerTo, String title, String body) {
-        this.customerFrom = customerFrom;
-        this.customerTo = customerTo;
+    public IncludeMail(User userFrom, User userTo, String title, String body) {
+        this.userFrom = userFrom;
+        this.userTo = userTo;
         this.title = title;
         this.body = body;
         this.delivered = false;
@@ -52,20 +62,20 @@ public class IncludeMail {
         this.row_id = row_id;
     }
 
-    public Customer getCustomerFrom() {
-        return customerFrom;
+    public User getUserFrom() {
+        return userFrom;
     }
 
-    public void setCustomerFrom(Customer customerFrom) {
-        this.customerFrom = customerFrom;
+    public void setUserFrom(User userFrom) {
+        this.userFrom = userFrom;
     }
 
-    public Customer getCustomerTo() {
-        return customerTo;
+    public User getUserTo() {
+        return userTo;
     }
 
-    public void setCustomerTo(Customer customerTo) {
-        this.customerTo = customerTo;
+    public void setUserTo(User userTo) {
+        this.userTo = userTo;
     }
 
     public String getTitle() {
@@ -101,10 +111,10 @@ public class IncludeMail {
     }
 
     public String getUserNameFrom(){
-        return customerFrom != null ? customerFrom.getUsername() : "<none>";
+        return userFrom != null ? userFrom.getUsername() : "<none>";
     }
 
     public String getUserNameTo(){
-        return customerTo != null ? customerTo.getUsername() : "<none>";
+        return userTo != null ? userTo.getUsername() : "<none>";
     }
 }

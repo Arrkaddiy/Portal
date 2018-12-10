@@ -39,15 +39,15 @@
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     My invoice
-                    <#if invoicessize != 0>
-                        <span class="badge badge-light">${invoicessize}</span>
+                    <#if invoicesNum != 0>
+                        <span class="badge badge-light">${invoicesNum}</span>
                         <span class="sr-only">Active invoice</span>
                     </#if>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/invoices/inprogress">In Progress
-                        <#if invoicessize != 0>
-                            <span class="badge badge-primary">${invoicessize}</span>
+                    <a class="dropdown-item" href="/invoices/inProgress">In Progress
+                        <#if invoicesNum != 0>
+                            <span class="badge badge-primary">${invoicesNum}</span>
                             <span class="sr-only">Active invoice</span>
                         </#if>
                     </a>
@@ -59,7 +59,7 @@
     </ul>
     <div class="navbar-text mr-3">Hello, ${name}!</div>
     <#if user??>
-        <div><a class="btn btn-primary mr-1" href="/personalpage" role="button">Personal Page</a></div>
+        <div><a class="btn btn-primary mr-1" href="/personalPage" role="button">Personal Page</a></div>
         <@login.logoutB />
     <#else>
         <@login.loginB />

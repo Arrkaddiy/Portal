@@ -1,5 +1,7 @@
 package my.web.service;
 
+import my.web.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +16,10 @@ public class FileService {
     @Value("${upload.path}")
     private String uploadpath;
 
-    public String addPicture(MultipartFile file) throws IOException {
+    @Autowired
+    private UserService userService;
+
+    public boolean addPicture(MultipartFile file, User user) throws IOException {
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadpath);
@@ -23,14 +28,17 @@ public class FileService {
                 uploadDir.mkdir();
             }
 
-            String uuidfile = UUID.randomUUID().toString();
-            String resultfilename = uuidfile + "." + file.getOriginalFilename();
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
 
-            file.transferTo(new File(uploadpath + "/" + resultfilename));
+            file.transferTo(new File(uploadpath + "/" + resultFileName));
 
-            return resultfilename;
+            user.setAvatarName(resultFileName);
+            userService.save(user);
+
+            return true;
         }
 
-        return null;
+        return false;
     }
 }

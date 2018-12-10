@@ -2,13 +2,12 @@
 
 <@common.common>
 Pesonal Page
-
 <div>
     Avatar
 </div>
 <div>
-    <#if customer.avatarname??>
-    <img src="/img/${customer.avatarname}" />
+    <#if user.avatarName??>
+    <img src="/img/${user.avatarName}" />
 </#if>
 </div>
 <div>
@@ -17,55 +16,55 @@ Pesonal Page
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Login : </label>
     <div class="col-sm-4">
-        <input type="text" name="UserName" readonly class="form-control" value="${customer.username}"/>
+        <input type="text" name="userName" readonly class="form-control" value="${user.username}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Email : </label>
     <div class="col-sm-4">
-        <input type="email" name="email" readonly class="form-control" value="${customer.email}"/>
+        <input type="email" name="email" readonly class="form-control" value="${user.email}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Firstname : </label>
     <div class="col-sm-4">
-        <input type="text" name="firstname" readonly class="form-control" value="${customer.firstname}"/>
+        <input type="text" name="firstName" readonly class="form-control" value="${user.firstName}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> LastName : </label>
     <div class="col-sm-4">
-        <input type="text" name="lastname" readonly class="form-control" value="${customer.lastname}"/>
+        <input type="text" name="lastName" readonly class="form-control" value="${user.lastName}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Phone : </label>
     <div class="col-sm-4">
-        <input type="text" name="phone" readonly class="form-control" value="${customer.phone?ifExists}"/>
+        <input type="text" name="phone" readonly class="form-control" value="${user.phone?ifExists}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Country : </label>
     <div class="col-sm-4">
-        <input type="text" name="country" readonly class="form-control" value="${customer.country?ifExists}"/>
+        <input type="text" name="country" readonly class="form-control" value="${user.country?ifExists}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Sity : </label>
     <div class="col-sm-4">
-        <input type="text" name="sity" readonly class="form-control" value="${customer.sity?ifExists}"/>
+        <input type="text" name="city" readonly class="form-control" value="${user.city?ifExists}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Address : </label>
     <div class="col-sm-4">
-        <input type="text" name="address" readonly class="form-control" value="${customer.address?ifExists}"/>
+        <input type="text" name="address" readonly class="form-control" value="${user.address?ifExists}"/>
     </div>
 </div>
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Score : </label>
     <div class="col-sm-4">
-        <input type="text" name="score" readonly class="form-control" value="${customer.score?ifExists}"/>
+        <input type="text" name="score" readonly class="form-control" value="${user.score?ifExists}"/>
     </div>
 </div>
 

@@ -1,10 +1,10 @@
 package my.web.controller;
 
-import my.web.domain.Customer;
-import my.web.repos.CustomerRepo;
+import my.web.domain.User;
 import my.web.service.FileService;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
+import my.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,86 +17,103 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 @Controller
-@RequestMapping("/personalpage")
+@RequestMapping("/personalPage")
 public class PersonalPageController {
-    @Autowired
-    private CustomerRepo customerRepo;
-    @Autowired
-    private InvoiceService invoiceService;
-    @Autowired
-    private FileService fileService;
-    @Autowired
-    private IncludeMailService includeMailService;
 
     @Value("${upload.path}")
     private String uploadpath;
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private IncludeMailService includeMailService;
+
+    /**
+     * Персональяная страница авторизованного пользователя
+     * @param userAuth
+     * @param model
+     * @return
+     */
     @GetMapping
-    public String personalPage(@AuthenticationPrincipal Customer customerAuth, Model model) {
+    public String personalPage(@AuthenticationPrincipal User userAuth, Model model) {
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
+        model.addAttribute("user", userService.loadUserObjByUsername(userAuth.getUsername()));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+
         return "personalPage";
     }
 
-    @GetMapping("{customer}")
+    /**
+     * Персональяная страница пользователя
+     * @param userAuth
+     * @param user
+     * @param model
+     * @return
+     */
+    @GetMapping("{user}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String personalPageId(@AuthenticationPrincipal Customer customerAuth,
-                                 Customer customer, Model model) {
+    public String personalPageId(@AuthenticationPrincipal User userAuth,
+                                 User user, Model model) {
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+        model.addAttribute("user", userService.loadUserObjByUsername(user.getUsername()));
+        model.addAttribute("userAuth", userService.loadUserObjByUsername(userAuth.getUsername()));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+
         return "personalPage";
     }
 
+    /**
+     * Добавление аватара авторизованного пользователя
+     * @param userAuth
+     * @param file
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @PostMapping
-    public String addPicture(@AuthenticationPrincipal Customer customerAuth,
+    public String addPicture(@AuthenticationPrincipal User userAuth,
                              @RequestParam(name = "file") MultipartFile file,
                              Model model) throws IOException {
 
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadpath);
+        fileService.addPicture(file, userAuth);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        model.addAttribute("user", userService.loadUserObjByUsername(userAuth.getUsername()));
 
-            String uuidfile = UUID.randomUUID().toString();
-            String resultfilename = uuidfile + "." + file.getOriginalFilename();
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
 
-            file.transferTo(new File(uploadpath + "/" + resultfilename));
-
-            customerAuth.setAvatarname(resultfilename);
-        }
-
-        customerRepo.save(customerAuth);
-
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customerAuth.getUsername()));
-
-        return "personalPage";
+        return "redirect:/personalPage";
     }
 
-    @PostMapping("{customer}")
+    /**
+     * Добавления аватара польователю
+     * @param file
+     * @param user
+     * @param model
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("{user}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String addPictureID(@RequestParam(name = "file") MultipartFile file,
-                               Customer customer, Model model) throws IOException {
+                               User user, Model model) throws IOException {
 
-        if (fileService.addPicture(file) != null){
-            customer.setAvatarname(fileService.addPicture(file));
-        }
-        customerRepo.save(customer);
+        fileService.addPicture(file, user);
 
-        model.addAttribute("customer", customerRepo.findByUsernameIgnoreCase(customer.getUsername()));
+        model.addAttribute("user", userService.loadUserObjByUsername(user.getUsername()));
 
-        return "personalPage";
+        return "redirect:/personalPage/{user}";
     }
 
 }

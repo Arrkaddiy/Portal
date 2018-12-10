@@ -7,51 +7,68 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * Список пользователей
+ */
 @Entity
-@Table(name = "CUSTOMERS")
-public class Customer implements UserDetails {
+@Table(name = "USR")
+public class User implements UserDetails {
 
+    /* Уникальный ID пользователя */
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(unique = true)
     private long row_id;
 
+    /* Уникальный Login пользователя */
     @Column(unique = true, nullable = false, length = 40)
     private String username;
 
+    /* Пароль пользователя */
     @Column(nullable = false, length = 20)
     private String password;
 
+    /* Фамилия пользователя */
     @Column(nullable = false, length = 40)
-    private String firstname;
+    private String firstName;
 
+    /* Имя пользователя */
     @Column(nullable = false, length = 40)
-    private String lastname;
+    private String lastName;
 
+    /* Email пользователя */
     @Column(unique = true, nullable = false, length = 60)
     private String email;
 
+    /* Страна пользователя */
     @Column(length = 40)
     private String country;
 
+    /* Город пользователя */
     @Column(length = 40)
-    private String sity;
+    private String city;
 
+    /* Адрес пользователя */
     @Column(length = 70)
     private String address;
 
+    /* Телефон пользователя */
     @Column(length = 24)
     private String phone;
 
+    /* Счет пользователя */
     @Column
     private Long score;
 
+    /* Активность пользователя */
     private boolean active;
 
-    private String avatarname;
+    /* Ссылка на аватар пользователя */
+    private String avatarName;
 
+    /* Список ролей пользователя */
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "CUSTOMER_ROLE", joinColumns = @JoinColumn(name = "CUSTOMER_ROW_ID"))
+    @CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_ROW_ID"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
@@ -81,20 +98,20 @@ public class Customer implements UserDetails {
         this.password = password;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -121,12 +138,12 @@ public class Customer implements UserDetails {
         this.roles = roles;
     }
 
-    public String getAvatarname() {
-        return avatarname;
+    public String getAvatarName() {
+        return avatarName;
     }
 
-    public void setAvatarname(String avatarname) {
-        this.avatarname = avatarname;
+    public void setAvatarName(String avatarName) {
+        this.avatarName = avatarName;
     }
 
     @Override
@@ -166,12 +183,12 @@ public class Customer implements UserDetails {
         this.country = country;
     }
 
-    public String getSity() {
-        return sity;
+    public String getCity() {
+        return city;
     }
 
-    public void setSity(String sity) {
-        this.sity = sity;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getAddress() {

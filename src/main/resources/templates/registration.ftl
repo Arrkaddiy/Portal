@@ -23,15 +23,15 @@ ADD NEW USER
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label"> Firstname : </label>
+        <label class="col-sm-2 col-form-label"> FirstName : </label>
         <div class="col-sm-4">
-            <input type="text" name="firstname" class="form-control" placeholder="Firstname"/>
+            <input type="text" name="firstName" class="form-control" placeholder="FirstName"/>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"> LastName : </label>
         <div class="col-sm-4">
-            <input type="text" name="lastname" class="form-control" placeholder="LastName"/>
+            <input type="text" name="lastName" class="form-control" placeholder="LastName"/>
         </div>
     </div>
     <div class="form-group row">
@@ -47,9 +47,9 @@ ADD NEW USER
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label"> Sity : </label>
+        <label class="col-sm-2 col-form-label"> City : </label>
         <div class="col-sm-4">
-            <input type="text" name="sity" class="form-control" placeholder="Sity"/>
+            <input type="text" name="city" class="form-control" placeholder="City"/>
         </div>
     </div>
     <div class="form-group row">

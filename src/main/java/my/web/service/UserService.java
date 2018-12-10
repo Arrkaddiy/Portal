@@ -1,46 +1,58 @@
 package my.web.service;
 
-import my.web.domain.Customer;
+import my.web.domain.User;
 import my.web.domain.Role;
-import my.web.repos.CustomerRepo;
+import my.web.repos.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private final CustomerRepo customerRepo;
-    public UserService(CustomerRepo customerRepo) {
-        this.customerRepo = customerRepo;
-    }
+    @Autowired
+    private UserRepo userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return customerRepo.findByUsernameIgnoreCase(username);
+        return userRepo.findByUsernameIgnoreCase(username);
     }
 
-    public Customer loadCustomerByUsername(String username) {
-        return customerRepo.findByUsernameIgnoreCase(username);
+    public User loadUserObjByUsername(String username) {
+        return userRepo.findByUsernameIgnoreCase(username);
     }
-    public boolean addUser(Customer customer) {
 
-        Customer customerFromDb = customerRepo.findByUsernameIgnoreCase(customer.getUsername());
+    public boolean addUser(User user) {
 
-        if (customerFromDb != null) {
+        User userFromDb = userRepo.findByUsernameIgnoreCase(user.getUsername());
+
+        if (userFromDb != null) {
             return false;
         }
-        customer.setActive(true);
-        customer.setAvatarname("e1b242c7-ed7c-4349-add6-f930ea77da57.def.jpg");
-        customer.setRoles(Collections.singleton(Role.USER));
+        user.setActive(true);
+        user.setAvatarName("e1b242c7-ed7c-4349-add6-f930ea77da57.def.jpg");
+        user.setRoles(Collections.singleton(Role.ADMIN));
 
-        customerRepo.save(customer);
+        userRepo.save(user);
 
         return true;
     }
 
+    public void save(User user) {
+        userRepo.save(user);
+    }
+
+    public List<User> loadUsersAll () {
+        return userRepo.findAll();
+    }
+
+    public List<User> loadUsersByUsernameLike(String username) {
+        return userRepo.findByUsernameLike(username);
+    }
 
 }

@@ -13,7 +13,7 @@
     Список Invoices
 </div>
 <div>
-    <form method="GET" action="/main" id="filtr">
+    <form method="GET" action="/main" id="filter">
         <input type="text" name="filter" placeholder="${filter?ifExists}">
         <button type="submit">Фильтр</button>
     </form>

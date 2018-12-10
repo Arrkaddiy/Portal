@@ -1,6 +1,6 @@
 package my.web.controller;
 
-import my.web.domain.Customer;
+import my.web.domain.User;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,19 @@ public class IndexConrtoller {
     @Autowired
     private IncludeMailService includeMailService;
 
+    /**
+     * Index
+     * @param userAuth
+     * @param model
+     * @return
+     */
     @GetMapping("/")
-    public String index(@AuthenticationPrincipal Customer customerAuth,
+    public String index(@AuthenticationPrincipal User userAuth,
                         Model model){
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(customerAuth));
-        model.addAttribute("invoicessize", invoiceService.customerInvoiceOwner(customerAuth));
+
+        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+
         return "index";
     }
 }
