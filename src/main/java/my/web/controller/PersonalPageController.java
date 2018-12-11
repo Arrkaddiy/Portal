@@ -2,8 +2,7 @@ package my.web.controller;
 
 import my.web.domain.User;
 import my.web.service.FileService;
-import my.web.service.IncludeMailService;
-import my.web.service.InvoiceService;
+import my.web.service.SupportService;
 import my.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +30,7 @@ public class PersonalPageController {
     @Autowired
     private FileService fileService;
     @Autowired
-    private InvoiceService invoiceService;
-    @Autowired
-    private IncludeMailService includeMailService;
+    private SupportService supportService;
 
     /**
      * Персональяная страница авторизованного пользователя
@@ -46,8 +43,7 @@ public class PersonalPageController {
 
         model.addAttribute("user", userService.loadUserObjByUsername(userAuth.getUsername()));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "personalPage";
     }
@@ -67,8 +63,7 @@ public class PersonalPageController {
         model.addAttribute("user", userService.loadUserObjByUsername(user.getUsername()));
         model.addAttribute("userAuth", userService.loadUserObjByUsername(userAuth.getUsername()));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "personalPage";
     }
@@ -90,8 +85,7 @@ public class PersonalPageController {
 
         model.addAttribute("user", userService.loadUserObjByUsername(userAuth.getUsername()));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "redirect:/personalPage";
     }
@@ -116,4 +110,16 @@ public class PersonalPageController {
         return "redirect:/personalPage/{user}";
     }
 
+    @GetMapping("getPurse")
+    public String getPurse(@AuthenticationPrincipal User userAuth,
+                           @RequestParam String purse, Model model) {
+
+        userAuth.setScore(Long.valueOf(purse));
+        userService.save(userAuth);
+
+        model.addAttribute("user", userService.loadUserObjByUsername(userAuth.getUsername()));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
+
+        return "redirect:/personalPage";
+    }
 }

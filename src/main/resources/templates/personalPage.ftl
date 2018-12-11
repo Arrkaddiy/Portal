@@ -64,7 +64,39 @@ Pesonal Page
 <div class="form-group row">
     <label class="col-sm-2 col-form-label"> Score : </label>
     <div class="col-sm-4">
-        <input type="text" name="score" readonly class="form-control" value="${user.score?ifExists}"/>
+        <input type="number" name="score" readonly class="form-control" value="${user.score?ifExists}"/>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary col" data-toggle="modal" data-target="#replenishModal">
+            Replenish
+        </button>
+        <!-- Modal -->
+        <form action="personalPage/getPurse" method="GET">
+        <div class="modal fade" id="replenishModal" tabindex="-1" role="dialog" aria-labelledby="replenishModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="replenishModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label"> Purse : </label>
+                            <div class="col-sm-4">
+                                <input type="number" name="purse" class="form-control" step="0.01"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
     </div>
 </div>
 <div class="form-group row">

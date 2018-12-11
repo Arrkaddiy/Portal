@@ -3,6 +3,7 @@ package my.web.controller;
 import my.web.domain.User;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
+import my.web.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ public class InvoiceController {
     private InvoiceService invoiceService;
     @Autowired
     private IncludeMailService includeMailService;
+    @Autowired
+    private SupportService supportService;
 
     /**
      * Список счетов в работе
@@ -30,8 +33,7 @@ public class InvoiceController {
 
         model.addAttribute("invoicesinprogress", invoiceService.inProgress(userAuth));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "invoiceInProgress";
     }

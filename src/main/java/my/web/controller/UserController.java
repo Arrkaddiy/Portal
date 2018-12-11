@@ -2,8 +2,7 @@ package my.web.controller;
 
 import my.web.domain.Role;
 import my.web.domain.User;
-import my.web.service.IncludeMailService;
-import my.web.service.InvoiceService;
+import my.web.service.SupportService;
 import my.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private InvoiceService invoiceService;
-    @Autowired
-    private IncludeMailService includeMailService;
+    private SupportService supportService;
 
     /**
      * Список пользователей
@@ -55,8 +52,7 @@ public class UserController {
         model.addAttribute("users", users);
         model.addAttribute("search", search);
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "userList";
     }
@@ -76,8 +72,7 @@ public class UserController {
         model.addAttribute("userAuth", userService.loadUserObjByUsername(userAuth.getUsername()));
         model.addAttribute("roles", Role.values());
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "userEdit";
     }

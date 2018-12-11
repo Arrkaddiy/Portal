@@ -1,6 +1,7 @@
 <#import "parts/common.ftl" as common>
 
 <@common.common>
+New Message
 <form action="/mail" method="POST">
     <div>
         <label class="col-sm-2 col-form-label"> From : </label>

@@ -4,6 +4,7 @@ import my.web.domain.IncludeMail;
 import my.web.domain.User;
 import my.web.service.IncludeMailService;
 import my.web.service.InvoiceService;
+import my.web.service.SupportService;
 import my.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,9 +19,9 @@ public class IncludeMailController {
     @Autowired
     private UserService userService;
     @Autowired
-    private InvoiceService invoiceService;
-    @Autowired
     private IncludeMailService includeMailService;
+    @Autowired
+    private SupportService supportService;
 
     /**
      * Страница нового сообщения
@@ -35,8 +36,7 @@ public class IncludeMailController {
 
         model.addAttribute("userAuth", userAuth);
 
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "newMessage";
     }
@@ -55,8 +55,7 @@ public class IncludeMailController {
         model.addAttribute("userAuth", userAuth);
         model.addAttribute("userTo", userService.loadUserObjByUsername(userTo));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "newMessage";
     }
@@ -76,8 +75,7 @@ public class IncludeMailController {
         model.addAttribute("userAuth", userAuth);
         model.addAttribute("mail", includeMail);
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "newMessageRead";
     }
@@ -115,8 +113,7 @@ public class IncludeMailController {
         model.addAttribute("userAuth", userAuth);
         model.addAttribute("mailsIn", includeMailService.myInboxMail(userAuth));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "inboxMessage";
     }
@@ -134,8 +131,7 @@ public class IncludeMailController {
         model.addAttribute("userAuth", userAuth);
         model.addAttribute("mailsOut", includeMailService.myOutputMail(userAuth));
 
-        model.addAttribute("invoicesNum", invoiceService.userInvoiceOwner(userAuth));
-        model.addAttribute("myInboxMail", includeMailService.myInboxMailTrueNumber(userAuth));
+        model.mergeAttributes(supportService.supportData(model, userAuth));
 
         return "outputMessage";
     }

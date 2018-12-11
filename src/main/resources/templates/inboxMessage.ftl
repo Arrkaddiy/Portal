@@ -1,6 +1,7 @@
 <#import "parts/common.ftl" as common>
 
 <@common.common>
+Input Mails
 <#list mailsIn as mail>
 <div class="card mt-1">
     <div class="card-body">

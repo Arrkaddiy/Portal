@@ -17,10 +17,10 @@ public class InvoiceItem {
     @JoinColumn(name = "Invoice_ID", nullable = false)
     private Invoice invoice;
 
-/*    *//* Уникальный ID записи *//*
+    /* Уникальный ID записи */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Track_ID", nullable = false)
-    private Track track;*/
+    private Track track;
 
     @Column(name = "UnitPrice", nullable = false, length = 40)
     private long unitPrice;
@@ -44,13 +44,13 @@ public class InvoiceItem {
         this.invoice = invoice;
     }
 
-/*    public Track getTrack() {
+    public Track getTrack() {
         return track;
     }
 
     public void setTrack(Track track) {
         this.track = track;
-    }*/
+    }
 
     public long getUnitPrice() {
         return unitPrice;
